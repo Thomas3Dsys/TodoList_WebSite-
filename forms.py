@@ -22,17 +22,14 @@ class CreateNewList(FlaskForm):
     description= StringField("List Name", validators=[DataRequired(),Length(min=4, max=50)])
     submit = SubmitField("Create List")
 
-class AddCategory(FlaskForm):
-    description= StringField("CategoryName", validators=[DataRequired()])
-    submit = SubmitField("Add Category")
-    #Font Awesome Icon
-    #icon 
+# class AddCategory(FlaskForm):
+#     description= StringField("CategoryName", validators=[DataRequired()])
+#     submit = SubmitField("Add Category")
+#     #Font Awesome Icon
+#     #icon 
 
 class AddItemForm(FlaskForm):#use one text area and break on returns!!?
     description_1= StringField("To Do", validators=[DataRequired()])
-    #category_1= StringField("Category", validators=[DataRequired()])
     description_2= StringField("To Do")
-    #category_2= StringField("Category", validators=[DataRequired()])
     description_3= StringField("To Do")
-    #category_3= StringField("Category", validators=[DataRequired()])
     submit = SubmitField("Add Items")

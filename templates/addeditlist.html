@@ -40,35 +40,65 @@
             {%if list_items %}
                 <h3> List Items:</h3>
                 
-                
-                    {% for item in list_items %}
-                          <div class="list_item">
+                        {% for item in list_items %}
+                        <div class="list_item">
                             <a name='item{{ item.id }}'></a>   
-                        
-                            <span class="item_icon item_complete">   
-                            <i class="fa fa-check-circle" aria-hidden="true"></i>
-                            </span>
-                             <span class="item_icon">
-                            <i class="fa fa-times-circle" aria-hidden="true"></i>
-                            </span>
-                            <span class="item_icon">   
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
-                            </span>
-
-                           
-
-                            <span class='list-description'>{{item.description}}</span>
-                            </a>
-                          </div>
-                            <!-- Select Category -->
+                            <div class="item-text">
+                             <span class='list-description'>{{item.description}}</span>
+                            </div>
+                            <div class="edit_items">
+                                <span class="item_icon"   title="Edit">   
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </span>    
+                                <span class="item_icon item_complete"  title="Complete">   
+                                    <a href="{{url_for('complete_item', list_id = list.id, item_id = item.id)}}">
+                                        <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                    </a>
+                                </span>
+                                
+                                <span class="item_icon" title="Delete">
+                                    <a href="{{url_for('delete_item', list_id = list.id, item_id = item.id)}}">
+                                        <i class="fa fa-times-circle" aria-hidden="true"></i>
+                                    </a>
+                                </span>
+                       
+                            </div>
+                        </div>
+                        {% endfor %}
                 
-                    {% endfor %}
+
                 
+                        {% for item in completed_items %}
+                        <div class="completed_list_item">
+                            <a name='item{{ item.id }}'></a>   
+                            <div class="item-text">
+                             <span class='list-description'>{{item.description}}</span>
+                            </div>
+                            <div class="edit_items">
+                                <span class="item_icon item_restore" title="Restore">       
+                                    <a href="{{url_for('restore_item', list_id = list.id, item_id = item.id)}}">
+                                        <i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
+                                    </a>    
+                                </span>
+                                <span class="item_icon" title="Delete">
+                                    <a href="{{url_for('delete_item', list_id = list.id, item_id = item.id)}}">
+                                        <i class="fa fa-times-circle" aria-hidden="true"></i>
+                                    </a>    
+                                </span>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+
                 
             {% endif %}
+            <p class="post_item_links">
+                <a href="">View Deleted Items</a>
+            </p>
+            
             </div>
         </div>
-
+        
 
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
