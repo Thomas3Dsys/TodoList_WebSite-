@@ -1,0 +1,59 @@
+{% from "bootstrap5/form.html" import render_form %}
+{% include "header.html" %}
+
+<!-- Page Header-->
+<header class="masthead" >
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="post-heading">
+          <h1>View All</h1>
+          <span class="meta"
+            >Lists by <a href="#"> {{current_user.name}} </a>
+          </span>
+        </div>
+        </div>
+        </div>
+        </header>
+
+        <div class="container position-relative px-4 px-lg-5">
+        
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+           <h2>Actions</h2>
+            <ul>
+                <li><a href="{{url_for('new_list')}}">Create a new List</a></li>
+                <li><a href="{{url_for('new_category')}}">Add a new item category</a></li>
+                <li>Select a list below to add or edit items on a list</li>
+            </ul>
+        </div>
+
+        <div class="col-md-10 col-lg-8 col-xl-7">
+       <h2> Your Lists</h2>
+        {%if todo_lists %}
+        <ul>
+        <div class="col-md-10 col-lg-8 col-xl-7">
+             {% for list in todo_lists %}
+            <li>  
+                <a href="{{ url_for('add_edit_list', list_id=list.id) }}">
+                    <span class='list-description'>{{list.description}}</span>
+                </a>
+            </li>
+              {% endfor %}
+        </div>
+        </ul>
+        {% else %}
+        No Lists found: <a href="{{url_for('new_list')}}">Create a New List</a>
+
+        {% endif %}
+        </div>
+
+    </div>
+    <p></p>
+
+  
+
+
+
+
+{% include "footer.html" %}

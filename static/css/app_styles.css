@@ -1,0 +1,50 @@
+@charset "UTF-8";
+a {
+  text-decoration: underline !important;
+}
+
+
+span.item_complete
+{
+	color:green;	
+	opacity:.4;
+}
+
+
+span.item_icon 
+{
+		opacity:.1;
+}
+
+span.item_icon:hover
+{
+		opacity:1;
+}
+
+
+span.item_bullet_icon
+{
+	padding-left:20px
+}
+.list-description
+{
+	padding-left:20px
+}
+
+.list_item:hover{
+	background-color:#eeeeee
+
+
+}
+label#description_1, label#description_2, label#description_3
+{
+    display: inline-flex;
+    width: 99px;
+}
+
+
+input#description_1, input#description_2, input#description_3
+{
+    display: inline-flex;
+    width: calc(100% - 99px);
+}

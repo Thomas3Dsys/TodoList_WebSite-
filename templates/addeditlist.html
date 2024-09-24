@@ -1,0 +1,86 @@
+{% from "bootstrap5/form.html" import render_form %}
+{% block content %}
+{% include "header.html" %}
+
+<!-- Page Header -->
+<header  class="masthead">
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="page-heading">
+          <h1>Modify your list</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="mb-4">
+  <div class="container">
+    <div class="row">
+      <!-- Adding Flash message here for users trying to register twice -->
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      {% for message in messages %}
+      <p class="flash">{{ message }}</p>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+  
+       
+      <div class="col-lg-8 col-md-10 mx-auto">
+          <h2>
+          <a name='list{{ list.id }}'> </a>
+          {{ list.description }}
+          </h2>
+      </div>
+      
+       <div class="row gx-4 gx-lg-5 justify-content-center">
+           <div class="col-md-10 col-lg-8 col-xl-7">
+            {%if list_items %}
+                <h3> List Items:</h3>
+                
+                
+                    {% for item in list_items %}
+                          <div class="list_item">
+                            <a name='item{{ item.id }}'></a>   
+                        
+                            <span class="item_icon item_complete">   
+                            <i class="fa fa-check-circle" aria-hidden="true"></i>
+                            </span>
+                             <span class="item_icon">
+                            <i class="fa fa-times-circle" aria-hidden="true"></i>
+                            </span>
+                            <span class="item_icon">   
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </span>
+
+                           
+
+                            <span class='list-description'>{{item.description}}</span>
+                            </a>
+                          </div>
+                            <!-- Select Category -->
+                
+                    {% endfor %}
+                
+                
+            {% endif %}
+            </div>
+        </div>
+
+
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+            <!-- For items in form-->
+            <h3>Add More Items</h3>
+            {{render_form(add_form, novalidate=True, button_map={"submit": "primary"}) }}
+            </div>
+        </div>
+
+      </div>
+      </div>
+</main>
+
+
+{% include "footer.html" %} {% endblock %}
