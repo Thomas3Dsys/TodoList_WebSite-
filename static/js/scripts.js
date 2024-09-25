@@ -1,8 +1,4 @@
-/*!
-* Start Bootstrap - Clean Blog v6.0.9 (https://startbootstrap.com/theme/clean-blog)
-* Copyright 2013-2023 Start Bootstrap
-* Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-clean-blog/blob/master/LICENSE)
-*/
+
 window.addEventListener('DOMContentLoaded', () => {
     let scrollPos = 0;
     const mainNav = document.getElementById('mainNav');
@@ -26,4 +22,38 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         scrollPos = currentTop;
     });
+
+    
+    const add_item_trigger_elements = document.getElementsByClassName('rename-item-input');
+    for (var i = 0; i < add_item_trigger_elements.length; i++) {
+        add_item_trigger_elements[i].addEventListener('change', addEditItemList, false);
+        //add_item_trigger_elements[i].target_id= add_item_trigger_elements[i]["id"];
+    }
+
 })
+
+
+const as= document.getElementsByClassName('rename-toggle-hidden');
+const trigger = document.getElementById('rename_button');
+
+trigger.addEventListener('click', () => {
+  for( let r of as) 
+  {
+   r.classList.toggle('rename-toggle-shown')
+  }
+});
+
+
+const modified_items = [];
+const item_id_list = document.getElementById('item_id_list');
+var addEditItemList = function() {
+    modified_items.push(this.id)
+};
+
+const rename_submit_button = document.getElementById('rename-submit');
+rename_submit_button.addEventListener('click', () => {
+  item_id_list.value = modified_items.join(",");
+  //  alert(item_id_list.value)
+  form = document.getElementById('rename_form')
+  form.submit();
+});

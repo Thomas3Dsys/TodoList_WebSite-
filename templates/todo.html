@@ -2,19 +2,22 @@
 {% include "header.html" %}
 
 <!-- Page Header-->
-<header class="masthead" >
+<header  class="masthead">
   <div class="container position-relative px-4 px-lg-5">
     <div class="row gx-4 gx-lg-5 justify-content-center">
       <div class="col-md-10 col-lg-8 col-xl-7">
-        <div class="post-heading">
-          <h1>View All</h1>
+        <div class="page-heading">
+           <h1>Your Lists</h1>
           <span class="meta"
-            >Lists by <a href="#"> {{current_user.name}} </a>
+            >Lists by {{current_user.name}}
           </span>
         </div>
-        </div>
-        </div>
-        </header>
+      </div>
+    </div>
+  </div>
+</header>
+
+
 
         <div class="container position-relative px-4 px-lg-5">
         
@@ -23,7 +26,7 @@
            <h2>Actions</h2>
             <ul>
                 <li><a href="{{url_for('new_list')}}">Create a new List</a></li>
-                <li>Select a list below to add or edit items on a list</li>
+                <li><a href="{{url_for('view_all_items')}}">View all Items</a></li>
             </ul>
         </div>
 

@@ -1,0 +1,90 @@
+{% from "bootstrap5/form.html" import render_form %}
+{% block content %}
+{% include "header.html" %}
+
+<!-- Page Header -->
+<header  class="masthead">
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="page-heading">
+          <h1>Modify your list</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="mb-4">
+  <div class="container">
+    <div class="row">
+      <!-- Adding Flash message here for users trying to register twice -->
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      {% for message in messages %}
+      <p class="flash">{{ message }}</p>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+  
+       
+      <div class="col-lg-8 col-md-10 mx-auto">
+          <h2 >
+          <a name='list{{ list.id }}'> </a>
+          List: <span class="list-title">{{ list.description }}</span>
+          </h2>
+      </div>
+      
+       <div class="row gx-4 gx-lg-5 justify-content-center">
+           <div class="col-md-10 col-lg-8 col-xl-7 delete-page">
+            {%if list_items %}
+                <h3>Deleted List Items:</h3>
+                
+                        {% for item in list_items %}
+                        <div class="list_item">
+                            <a name='item{{ item.id }}'></a>   
+                            <div class="item-text">
+                             <span class='list-description'>{{item.description}}</span>
+                            </div>
+
+                            <div class="delete_detail_items">
+                            <span>Status: 
+                            {%if item.status==True%}
+                            Active
+                            {% else %}
+                            Completed
+                            {% endif %}
+                            </span>
+                            </div>
+                            <div class="edit_items">
+                                
+                                <span class="item_icon" title="Undelete">
+                                    <a href="{{url_for('undelete_item', list_id = list.id, item_id = item.id)}}">
+                                        <i class="fa-solid fa-delete-left"></i>
+                                    </a>
+                                </span>
+                       
+                            </div>
+                        </div>
+                        {% endfor %}
+                
+
+            {% else %}
+
+            <h3>No Deleted Items in this list</h3>
+                
+            {% endif %}
+            <p class="post_item_links">
+                <a <a href="{{url_for('add_edit_list', list_id = list.id)}}">Back to list</a>
+            </p>
+            
+            </div>
+        </div>
+        
+
+      </div>
+      </div>
+</main>
+
+
+{% include "footer.html" %} {% endblock %}

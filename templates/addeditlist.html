@@ -29,27 +29,35 @@
   
        
       <div class="col-lg-8 col-md-10 mx-auto">
-          <h2>
+          <h2 >
           <a name='list{{ list.id }}'> </a>
-          {{ list.description }}
+         List: <span class="list-title">{{ list.description }}</span>
           </h2>
       </div>
       
        <div class="row gx-4 gx-lg-5 justify-content-center">
-           <div class="col-md-10 col-lg-8 col-xl-7">
-            {%if list_items %}
-                <h3> List Items:</h3>
-                
+           <div class="col-md-11 col-lg-9 col-xl-8">
+            {%if list_items or completed_items%}
+             <h3> List Items:</h3>
+
+             {%if list_items %}
+              <form action="{{url_for('rename_items')}}" id="rename_form" method="post" >              
+              <input name="list_id" value="{{list.id}}" type="hidden">
+              <input name="item_id_list" id="item_id_list" value="" type="hidden">
+              <h4>Active:</h4>    
                         {% for item in list_items %}
                         <div class="list_item">
-                            <a name='item{{ item.id }}'></a>   
+                            <a name='item{{item.id}}'></a>   
                             <div class="item-text">
-                             <span class='list-description'>{{item.description}}</span>
+                             <span class='item-description'>{{item.description}}</span>
+                             <span class='item-rename rename-toggle-hidden'>
+                                <input class="rename-item-input" id="{{item.id}}" name="edit-item-{{item.id}}" required="" type="text" value="{{item.description}}">
+                             </span>
+
                             </div>
                             <div class="edit_items">
-                                <span class="item_icon"   title="Edit">   
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
-                                </span>    
+                                
+                               
                                 <span class="item_icon item_complete"  title="Complete">   
                                     <a href="{{url_for('complete_item', list_id = list.id, item_id = item.id)}}">
                                         <i class="fa fa-check-circle" aria-hidden="true"></i>
@@ -65,9 +73,30 @@
                             </div>
                         </div>
                         {% endfor %}
-                
+           
+               <div class="post_section_action_bar">
+                <span class="item_icon_post btn" id="rename_button">
+                <i class="fa fa-pencil" aria-hidden="true"></i> Toggle Rename Items
+                </span> 
 
                 
+                    <span class="item_icon_post" >
+                    <span class="rename-toggle-hidden">
+                        <button type="submit" id="rename-submit" class="btn">
+                            <i class="fa fa fa-check-square fa-lg"></i> Rename Changed Items
+                        </button>
+                    </span> 
+                </span> 
+                
+
+
+                </div>
+
+                 </form>
+
+               {% endif %}
+               {%if completed_items %}
+                <h4>Completed:</h4>
                         {% for item in completed_items %}
                         <div class="completed_list_item">
                             <a name='item{{ item.id }}'></a>   
@@ -88,14 +117,19 @@
                             </div>
                         </div>
                         {% endfor %}
-
-
+                {% endif %}
                 
             {% endif %}
-            <p class="post_item_links">
-                <a href="">View Deleted Items</a>
-            </p>
-            
+
+            <div class="post_section_action_bar">
+            <span class="item_icon_post btn" title="View Deleted Items">
+                    <a href=href="{{url_for('deleted_items_in_list', list_id = list.id)}}">  
+                    <i class="fa fa-eye" aria-hidden="true"></i> View Deleted Items
+                    </a>
+                </span> 
+            </div>
+
+
             </div>
         </div>
         

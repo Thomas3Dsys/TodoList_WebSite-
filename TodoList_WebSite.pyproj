@@ -23,19 +23,25 @@
   <ItemGroup>
     <Compile Include="forms.py" />
     <Compile Include="main.py" />
+    <Compile Include="templates\newlist.py" />
     <Compile Include="TodoList_WebSite.py" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".env" />
     <Content Include="static\assets\favicon.ico" />
+    <Content Include="static\css\app_styles.css" />
     <Content Include="static\css\styles.css" />
     <Content Include="static\js\scripts.js" />
     <Content Include="templates\about.html" />
+    <Content Include="templates\viewdeleteditems.html" />
+    <Content Include="templates\viewallitems.html" />
+    <Content Include="templates\addeditlist.html" />
     <Content Include="templates\contact.html" />
     <Content Include="templates\footer.html" />
     <Content Include="templates\header.html" />
     <Content Include="templates\index.html" />
     <Content Include="templates\login.html" />
+    <Content Include="templates\newlist.html" />
     <Content Include="templates\register.html" />
     <Content Include="templates\todo.html" />
   </ItemGroup>

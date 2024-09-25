@@ -1,4 +1,11 @@
 @charset "UTF-8";
+
+.list-title
+{
+color:#00c8ff
+
+}
+
 a {
   text-decoration: underline;
 }
@@ -53,11 +60,18 @@ span.item_icon:hover, .item_icon.item_complete:hover
 {
 	
     display: inline-flex;
-    width: calc(100% - 150px);
+    width: calc(100% - 110px);
     flex-direction: row;
 
 }
+ .delete-page .item-text
+{
+	
+    display: inline-flex;
+    width: calc(100% - 310px);
+    flex-direction: row;
 
+}
 
 .edit_items
 {
@@ -69,7 +83,13 @@ span.item_icon:hover, .item_icon.item_complete:hover
 
 }
 
+.delete_detail_items
+{
+display: inline-flex;
+width:200px;
+justify-content: flex-start;
 
+}
 
 label#description_1, label#description_2, label#description_3
 {
@@ -86,3 +106,47 @@ input#description_1, input#description_2, input#description_3
 
 
 
+.rename-toggle-hidden
+{
+display:none;
+}
+
+.rename-toggle-shown
+{
+display:block;
+}
+
+.post_section_action_bar
+{
+	background-color:#fafafa;
+    padding:10px;
+    margin:10px
+}
+
+.post_section_action_bar:hover
+{
+	background-color:#8888aa
+}
+ .post_section_action_bar  .item_icon_post
+ {
+     border-radius: 10px;
+     cursor:pointer;
+     display: inline-flex;
+     margin-right:10px;
+     padding:10px
+ }
+  .post_section_action_bar  .item_icon_post:hover
+ {
+     cursor:pointer;
+     display: inline-flex;
+     margin-right:10px;
+     	background-color:#aaaaee
+ }
+
+
+.btn
+ {
+     padding: 0px;
+     
+ 
+ }

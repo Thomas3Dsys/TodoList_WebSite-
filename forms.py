@@ -22,12 +22,6 @@ class CreateNewList(FlaskForm):
     description= StringField("List Name", validators=[DataRequired(),Length(min=4, max=50)])
     submit = SubmitField("Create List")
 
-# class AddCategory(FlaskForm):
-#     description= StringField("CategoryName", validators=[DataRequired()])
-#     submit = SubmitField("Add Category")
-#     #Font Awesome Icon
-#     #icon 
-
 class AddItemForm(FlaskForm):#use one text area and break on returns!!?
     description_1= StringField("To Do", validators=[DataRequired()])
     description_2= StringField("To Do")

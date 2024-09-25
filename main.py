@@ -53,7 +53,7 @@ class ToDoItem(db.Model):
     #added_date      : Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now()),
     #completed_date  : Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), server_default=func.now()),
     todo_list_id: Mapped[Optional[int]] = mapped_column(ForeignKey("todolists.id"), nullable=False)
-    #category_id: Mapped[Optional[int]] = mapped_column(ForeignKey("categories.id"), nullable=True)
+    #add list name for reference?
     status  : Mapped[bool] = mapped_column(unique=False, default=True)
     archive :  Mapped[bool] =  mapped_column(unique=False, default=False)
     #add status!!!!!!
@@ -66,7 +66,6 @@ class User(UserMixin, db.Model):
     password: Mapped[str] = mapped_column(String(100))
     name: Mapped[str] = mapped_column(String(100))
     todolists= relationship("ToDoList", back_populates="author") # back populates the author of the to do list
-    #categories= relationship("Category", back_populates="author") # back poluates the author of the category
     
 
 #Name of the List for the item in todoitems
@@ -76,16 +75,6 @@ class ToDoList(db.Model):
     author_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("users.id"))
     author = relationship("User", back_populates="todolists") # back populates the todo lists the user authors
     description: Mapped[str] = mapped_column(String(50), unique=False, nullable=False)
-
-
-# #Category of the item in todoitems
-# class Category(db.Model):
-#     __tablename__ = "categories"
-#     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-#     author_id: Mapped[int] = mapped_column(Integer, db.ForeignKey("users.id"))
-#     author = relationship("User", back_populates="categories")# back populates the categories the user authors
-#     description: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
-#     icon: Mapped[str] = mapped_column(String(50), nullable=True)
 
 
 with app.app_context():
@@ -125,12 +114,12 @@ def register():
         # This line will authenticate the user with Flask-Login
         login_user(new_user)
         return redirect(url_for("todo"))
-    return render_template("register.html", form=form, current_user=current_user.id)
+    return render_template("register.html", form=form, current_user=current_user)
 
 
 @app.route('/')
 def home():
-    return render_template("index.html", current_user=current_user.id)
+    return render_template("index.html", current_user=current_user)
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
@@ -152,12 +141,12 @@ def login():
             login_user(user)
             return redirect(url_for('todo'))
 
-    return render_template("login.html", form=form, current_user=current_user.id)
+    return render_template("login.html", form=form, current_user=current_user)
 
 @app.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('login'),current_user=current_user.id)
+    return redirect(url_for('login'),current_user=current_user)
 
 
 # ************* App *************
@@ -166,7 +155,7 @@ def logout():
 def todo():
     result = db.session.execute(db.select(ToDoList))
     lists  = result.scalars().all()
-    return render_template("todo.html", todo_lists = lists, current_user=current_user.id)
+    return render_template("todo.html", todo_lists = lists, current_user=current_user)
 
 
 @app.route('/newlist', methods=["GET", "POST"])
@@ -182,15 +171,11 @@ def new_list():
         db.session.add(new_list)
         db.session.commit()
         #redirect to newly created list
-        #return render_template("addeditlist.html", id = ??, current_user=current_user.id)
-        return redirect(url_for("todo", current_user=current_user.id))
+        #return render_template("addeditlist.html", id = ??, current_user=current_user)
+        return redirect(url_for("todo", current_user=current_user))
         
-    return render_template("newlist.html", form=new_list_form, current_user=current_user.id)
+    return render_template("newlist.html", form=new_list_form, current_user=current_user)
 
-
-# @app.route('/newcat')
-# def new_category():
-#     return render_template("newcat.html", current_user=current_user.id)
 
 @app.route('/addeditlist/<int:list_id>', methods=["GET", "POST"])
 def add_edit_list(list_id):
@@ -198,8 +183,8 @@ def add_edit_list(list_id):
     requested_list = db.get_or_404(ToDoList, list_id)
     
     #get list Items
-    requested_list_items = db.session.execute(db.select(ToDoItem).where(ToDoItem.todo_list_id == list_id, ToDoItem.status == True)).scalars().all()
-    requested_completed_items = db.session.execute(db.select(ToDoItem).where(ToDoItem.todo_list_id == list_id, ToDoItem.status == False)).scalars().all()
+    requested_list_items = db.session.execute(db.select(ToDoItem).where(ToDoItem.todo_list_id == list_id, ToDoItem.status == True, ToDoItem.archive == False)).scalars().all()
+    requested_completed_items = db.session.execute(db.select(ToDoItem).where(ToDoItem.todo_list_id == list_id, ToDoItem.status == False, ToDoItem.archive == False)).scalars().all()
 
     add_items_form = AddItemForm()
     if add_items_form.validate_on_submit():
@@ -225,10 +210,34 @@ def add_edit_list(list_id):
             db.session.bulk_save_objects(new_items)
             db.session.commit()
 
-        return redirect(url_for("add_edit_list", list_id = list_id, current_user=current_user.id))
+        return redirect(url_for("add_edit_list", list_id = list_id, current_user=current_user))
         
 
-    return render_template("addeditlist.html",list=requested_list, list_items=requested_list_items, completed_items=requested_completed_items,add_form = add_items_form, current_user=current_user.id)
+    return render_template("addeditlist.html",list=requested_list, list_items=requested_list_items, completed_items=requested_completed_items,add_form = add_items_form, current_user=current_user)
+
+
+
+
+@app.route('/viewdeleteditems/<int:list_id>', methods=["GET", "POST"])
+def deleted_items_in_list(list_id):
+    #get list
+    requested_list = db.get_or_404(ToDoList, list_id)
+    
+    #get list Items
+    requested_list_items = db.session.execute(db.select(ToDoItem).where(ToDoItem.todo_list_id == list_id,  ToDoItem.archive == True)).scalars().all()
+    
+
+    return render_template("viewdeleteditems.html",list=requested_list, list_items=requested_list_items,  current_user=current_user)
+
+
+@app.route('/view_all_items/')
+def view_all_items():
+    requested_list_items = db.session.execute(db.select(ToDoItem).where(ToDoItem.author_id == current_user.id, ToDoItem.status == True, ToDoItem.archive == False)).scalars().all()
+    requested_completed_items = db.session.execute(db.select(ToDoItem).where(ToDoItem.author_id == current_user.id, ToDoItem.status == False, ToDoItem.archive == False)).scalars().all()
+
+    return render_template("viewallitems.html", list_items=requested_list_items, completed_items=requested_completed_items, current_user=current_user)
+
+
 
 
 @app.route("/complete-item/<int:list_id>/<int:item_id>", methods=["GET", "POST"])
@@ -247,6 +256,36 @@ def complete_item(list_id, item_id):
         flash("You cannot complete other users items!")
         return redirect(url_for('add_edit_list', list_id = list_id))
     
+
+
+@app.route("/rename-items/", methods=["GET", "POST"])
+def rename_items():
+    if not current_user.is_authenticated:
+        flash("You need to login or register to comment.")
+        return redirect(url_for("login"))
+
+    list_id = request.form["list_id"]
+    list_obj = db.get_or_404(ToDoList, list_id )
+    
+    print(f"listID:{list_id}")
+    if list_obj.author_id != current_user.id:
+        flash("You cannot edit list items form other users!")
+        return redirect(url_for('add_edit_list', list_id = list_id))
+    else:
+        update_items_list = request.form["item_id_list"]
+        update_items = update_items_list.split(",")
+        update_message = []
+        for id in update_items:
+            tag_name = f"edit-item-{id}"
+            update_value = request.form[tag_name]
+            update_item_db_obj = db.get_or_404(ToDoItem, id)
+            update_item_db_obj.description = update_value 
+            update_message.append(update_value)
+
+        db.session.commit()
+        flash(f"Updated Items: {str.join(', ',update_message)}")
+        return redirect(url_for("add_edit_list", list_id = list_id, current_user=current_user))
+        
 
 
 @app.route("/restore-item/<int:list_id>/<int:item_id>", methods=["GET", "POST"])
@@ -304,11 +343,11 @@ def undelete_item(list_id, item_id):
 
 @app.route("/about")
 def about():
-    return render_template("about.html", current_user=current_user.id)
+    return render_template("about.html", current_user=current_user)
 
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
-    return render_template("contact.html", current_user=current_user.id)
+    return render_template("contact.html", current_user=current_user)
     
 
 
